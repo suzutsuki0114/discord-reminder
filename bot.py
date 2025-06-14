@@ -84,7 +84,6 @@ async def refresh_list():
 
 async def refresh_list_today(send):
     channel = bot.get_channel(CHANNEL)
-    # list_message = await channel.fetch_message(1378331235302117417)
     today = date.today()
     reminders = [
         (reminder_id, r) for reminder_id, r in manager.reminders.items()
