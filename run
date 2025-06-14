@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sudo docker build -t discord-reminder .
+sudo docker run -d --name discord-reminder discord-reminder

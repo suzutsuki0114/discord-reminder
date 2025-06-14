@@ -1,0 +1,5 @@
+#!/bin/bash
+
+sudo iptables -I DOCKER-USER -d 192.168.11.0/24 -j DROP
+sudo iptables -I DOCKER-USER -d 192.168.11.1 -j ACCEPT
+sudo iptables -I DOCKER-USER -d 192.168.11.1 -p tcp --dport 80 -j DROP
