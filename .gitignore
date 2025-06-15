@@ -1,0 +1,10 @@
+/**
+!/.gitignore
+!/data/
+!/bot.py
+!/reminder_manager.py
+!/Dockerfile
+!/databackup
+!/iptables
+!/reset
+!/run
