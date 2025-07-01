@@ -3,6 +3,7 @@
 !/data/
 !/bot.py
 !/reminder_manager.py
+!/env.py
 !/Dockerfile
 !/databackup
 !/iptables
