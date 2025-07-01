@@ -4,7 +4,9 @@ WORKDIR /app
 
 COPY bot.py . 
 COPY reminder_manager.py . 
+COPY env.py .
 COPY data/reminders.json ./data/
+COPY .env .
 
 RUN apt-get update && \
     apt-get -y install locales tzdata && \
