@@ -228,7 +228,11 @@ async def add(interaction: discord.Interaction, month: int, day: int, hour: int,
         scheduler.add_job(send_reminder, "date", run_date=target_time + timedelta(minutes = -30), args=[reminder_id, 30])
     scheduler.add_job(send_passed, "date", run_date=target_time, args=[reminder_id])
 
-    await refresh_list()
+    try:
+        await refresh_list()
+    except Exception as e:
+        print(f"リストの更新に失敗しました: {e}")
+        await channel.send(f"リストの更新に失敗しました: {e}")
     await interaction.followup.send("正常に登録されました")
     await channel.send(f"<@{interaction.user.id}> によって **{time_str}** 提出期限の提出物 **{title}** (ID: `{reminder_id}`) が登録されました")
 
@@ -258,7 +262,11 @@ class ConfirmView(discord.ui.View):
         # self.user = interaction.uesr.id
 
         manager.delete(self.reminder_id)
-        await refresh_list()
+        try:
+            await refresh_list()
+        except Exception as e:
+            print(f"リストの更新に失敗しました: {e}")
+            await self.channel.send(f"リストの更新に失敗しました: {e}")
         # await interaction.response.edit_message(content=f"@everyone\n**{self.time}** 期限の提出物 **{self.title}** (ID: `{self.reminder_id}`) を削除しました。", view=None, ephemeral=False)
         await interaction.response.edit_message(content="正常に削除されました", view=None)
         await self.channel.send(content=f"<@{self.user_id}> によって **{self.time_str}** 提出期限の提出物 **{self.title}** (ID: `{self.reminder_id}`) が削除されました")
