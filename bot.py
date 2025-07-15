@@ -53,7 +53,6 @@ async def on_ready():
         await refresh_list()
     except Exception as e:
         print(f"リストの更新に失敗しました: {e}")
-        await channel.send(f"リストの更新に失敗しました: {e}")
     print("リマインダーを再設定しました")
 
 # @bot.tree.command(name="list", description="現在追加されている提出物一覧を表示します")
