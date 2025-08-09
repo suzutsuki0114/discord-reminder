@@ -47,6 +47,7 @@ async def on_ready():
         manager.delete(rid)
         print(f"{time_str} 期限の提出物 {title} (ID: {rid}) は提出期限が過ぎていたため削除されました")
 
+    scheduler.add_job(refresh_list, 'cron', hour=0)
     scheduler.add_job(refresh_list_today, 'cron', hour=7, args=[True])
     scheduler.add_job(refresh_list_tomorrow, 'cron', hour=20, args=[True])
     try:
@@ -63,6 +64,7 @@ async def refresh_list():
     reminders = [
         (reminder_id, r) for reminder_id, r in manager.reminders.items()
     ]
+    sorted_reminders = sorted(reminders, key=lambda item: datetime.fromisoformat(item[1]['time']))
 
     if not reminders:
         # await interaction.response.send_message("提出物はありません", ephemeral=True)
@@ -70,7 +72,7 @@ async def refresh_list():
         return
 
     lines = ["## 提出物"]
-    for reminder_id, r in reminders:
+    for reminder_id, r in sorted_reminders:
         time = r["time"]
         time_timestamp = datetime.fromisoformat(time)
         weekday = weekday_jp[int(time_timestamp.strftime("%w"))]
@@ -111,8 +113,10 @@ async def refresh_list_today(send):
             await channel.send("今日が提出期限の提出物はありません")
         return "今日が提出期限の提出物はありません"
 
+    sorted_reminders_today = sorted(reminders_today, key=lambda item: datetime.fromisoformat(item[1]['time']))
+
     lines = ["## 今日が提出期限の提出物"]
-    for reminder_id, r, in reminders_today:
+    for reminder_id, r, in sorted_reminders_today:
         time = r["time"]
         time_timestamp = datetime.fromisoformat(time)
         time_str = time_timestamp.strftime("%H時%M分")
@@ -149,8 +153,10 @@ async def refresh_list_tomorrow(send):
             await channel.send("明日が提出期限の提出物はありません")
         return "明日が提出期限の提出物はありません"
 
+    sorted_reminders_tomorrow = sorted(reminders_tomorrow, key=lambda item: datetime.fromisoformat(item[1]['time']))
+
     lines = ["## 明日が提出期限の提出物"]
-    for reminder_id, r, in reminders_tomorrow:
+    for reminder_id, r, in sorted_reminders_tomorrow:
         time = r["time"]
         time_timestamp = datetime.fromisoformat(time)
         time_str = time_timestamp.strftime("%H時%M分")
